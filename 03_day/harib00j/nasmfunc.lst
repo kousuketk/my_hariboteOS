@@ -1,0 +1,4 @@
+     1                                  GLOBAL  io_hlt          ; このプログラムに含まれる関数名
+     2                                  io_hlt: ; void io_hlt(void);
+     3 00000000 F4                              HLT
+     4 00000001 C3                              RET
