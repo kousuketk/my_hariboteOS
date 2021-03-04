@@ -170,9 +170,9 @@ struct TIMER {
 	int data;
 };
 struct TIMERCTL {
-	unsigned int count, next, using;
+	unsigned int count, next;
 	struct TIMER *t0;
-	struct TIMER timer[MAX_TIMER];
+	struct TIMER timers0[MAX_TIMER];
 };
 extern struct TIMERCTL timerctl;
 void init_pit(void);
