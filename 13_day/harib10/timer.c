@@ -42,9 +42,9 @@ struct TIMER *timer_alloc(void)
 	return 0; /* 見つからなかった */
 }
 
-void timer_free(struct TIMER *timers0)
+void timer_free(struct TIMER *timer)
 {
-	timers0->flags = 0; /* 未使用 */
+	timer->flags = 0; /* 未使用 */
 	return;
 }
 
