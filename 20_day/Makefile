@@ -33,13 +33,17 @@ bootpack.hrb : $(OBJS_BOOTPACK) hrb.ld Makefile
 hello.hrb : hello.nas Makefile
 	nasm $< -o $@ -l hello.lst
 
+hello2.hrb : hello2.nas Makefile
+	nasm $< -o $@ -l hello2.lst
+
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
-haribote.img : ipl10.bin haribote.sys hello.hrb Makefile
+haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb Makefile
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy -i haribote.img haribote.sys ::
 	mcopy -i haribote.img hello.hrb ::
+	mcopy -i haribote.img hello2.hrb ::
 
 # 一般規則
 
