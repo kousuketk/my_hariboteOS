@@ -30,16 +30,16 @@ nasmfunc.o : nasmfunc.asm Makefile
 bootpack.hrb : $(OBJS_BOOTPACK) hrb.ld Makefile
 	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_BOOTPACK) -o $@
 
-hlt.hrb : asmhead.nas Makefile
-	nasm $< -o $@ -l asmhead.lst
+hello.hrb : hello.nas Makefile
+	nasm $< -o $@ -l hello.lst
 
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
-haribote.img : ipl10.bin haribote.sys hlt.hrb Makefile
+haribote.img : ipl10.bin haribote.sys hello.hrb Makefile
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy -i haribote.img haribote.sys ::
-	mcopy -i haribote.img hlt.hrb ::
+	mcopy -i haribote.img hello.hrb ::
 
 # 一般規則
 
