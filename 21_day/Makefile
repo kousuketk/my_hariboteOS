@@ -46,16 +46,20 @@ hello3.hrb : $(OBJS_BOOTPACK2) hrb.ld Makefile
 crack1.hrb : crack1.o hrb.ld Makefile
 	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g crack1.o -o $@
 
+crack2.hrb : crack2.nas Makefile
+	nasm $< -o $@ -l hello2.lst
+
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
-haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb hello3.hrb crack1.hrb Makefile
+haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb hello3.hrb crack1.hrb crack2.hrb Makefile
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy -i haribote.img haribote.sys ::
 	mcopy -i haribote.img hello.hrb ::
 	mcopy -i haribote.img hello2.hrb ::
 	mcopy -i haribote.img hello3.hrb ::
 	mcopy -i haribote.img crack1.hrb ::
+	mcopy -i haribote.img crack2.hrb ::
 
 # 一般規則
 
