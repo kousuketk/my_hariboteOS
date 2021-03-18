@@ -1,5 +1,6 @@
 OBJS_BOOTPACK = bootpack.o graphic.o dsctbl.o nasmfunc.o hankaku.o mysprintf.o int.o fifo.o keyboard.o mouse.o memory.o sheet.o timer.o mtask.o window.o console.o file.o
 OBJS_BOOTPACK2 = hello3.o a_nasm.o
+OBJS_BOOTPACK3 = crack1.o a_nasm.o
 
 MAKE     = make -r
 DEL      = rm -f
@@ -43,8 +44,8 @@ hello2.hrb : hello2.nas Makefile
 hello3.hrb : $(OBJS_BOOTPACK2) hrb.ld Makefile
 	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_BOOTPACK2) -o $@
 
-crack1.hrb : crack1.o hrb.ld Makefile
-	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g crack1.o -o $@
+crack1.hrb : $(OBJS_BOOTPACK3) hrb.ld Makefile
+	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_BOOTPACK3) -o $@
 
 crack2.hrb : crack2.nas Makefile
 	nasm $< -o $@ -l hello2.lst
