@@ -7,13 +7,13 @@ GLOBAL	load_cr0, store_cr0
 GLOBAL	load_tr
 GLOBAL	asm_inthandler20, asm_inthandler21
 GLOBAL	asm_inthandler27, asm_inthandler2c
-GLOBAL	asm_inthandler0d
-GLOBAL	memtest_sub
+GLOBAL	asm_inthandler0c, asm_inthandler0d
+GLOBAL	asm_end_app, memtest_sub
 GLOBAL	farjmp, farcall
 GLOBAL	asm_hrb_api, start_app
 EXTERN	inthandler20, inthandler21
 EXTERN	inthandler27, inthandler2c
-EXTERN	inthandler0d
+EXTERN	inthandler0c, inthandler0d
 EXTERN	hrb_api
 
 io_hlt:	; void io_hlt(void);
@@ -168,6 +168,26 @@ asm_inthandler2c:
 		POP		ES
 		IRETD
 
+asm_inthandler0c:
+		STI
+		PUSH	ES
+		PUSH	DS
+		PUSHAD
+		MOV		EAX,ESP
+		PUSH	EAX
+		MOV		AX,SS
+		MOV		DS,AX
+		MOV		ES,AX
+		CALL	inthandler0c
+		CMP		EAX,0
+		JNE		asm_end_app
+		POP		EAX
+		POPAD
+		POP		DS
+		POP		ES
+		ADD		ESP,4			; INT 0x0c でも、これが必要
+		IRETD
+
 asm_inthandler0d:
 		STI
 		PUSH	ES
@@ -179,8 +199,8 @@ asm_inthandler0d:
 		MOV		DS,AX
 		MOV		ES,AX
 		CALL	inthandler0d
-		CMP		EAX,0		; ここだけ違う
-		JNE		end_app		; ここだけ違う
+		CMP		EAX,0			; ここだけ違う
+		JNE		asm_end_app	; ここだけ違う
 		POP		EAX
 		POPAD
 		POP		DS
@@ -240,15 +260,16 @@ asm_hrb_api:
 		MOV		ES,AX
 		CALL	hrb_api
 		CMP		EAX,0		; EAXが0でなければアプリ終了処理
-		JNE		end_app
+		JNE		asm_end_app
 		ADD		ESP,32
 		POPAD
 		POP		ES
 		POP		DS
 		IRETD
-end_app:
+asm_end_app:
 ;	EAXはtss.esp0の番地
 		MOV		ESP,[EAX]
+		MOV		DWORD [EAX+4],0
 		POPAD
 		RET					; cmd_appへ帰る
 
