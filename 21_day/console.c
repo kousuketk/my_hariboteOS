@@ -184,10 +184,7 @@ void cmd_mem(struct CONSOLE *cons, unsigned int memtotal)
 {
 	struct MEMMAN *memman = (struct MEMMAN *) MEMMAN_ADDR;
 	char s[60];
-	sprintf(s, "total   %dMB", memtotal / (1024 * 1024));
-	putfonts8_asc_sht(cons->sht, 8, cons->cur_y, COL8_FFFFFF, COL8_000000, s, 30);
-	cons_newline(cons);
-	sprintf(s, "free %dKB", memman_total(memman) / 1024);
+	sprintf(s, "total   %dMB\nfree %dKB\n\n", memtotal / (1024 * 1024), memman_total(memman) / 1024);
 	cons_putstr0(cons, s);
 	return;
 }
@@ -237,7 +234,6 @@ void cmd_type(struct CONSOLE *cons, int *fat, char *cmdline)
 	struct MEMMAN *memman = (struct MEMMAN *) MEMMAN_ADDR;
 	struct FILEINFO *finfo = file_search(cmdline + 5, (struct FILEINFO *) (ADR_DISKIMG + 0x002600), 224);
 	char *p;
-	int i;
 	if (finfo != 0) {
 		/* ƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚Á‚½ê‡ */
 		p = (char *) memman_alloc_4k(memman, finfo->size);
@@ -287,6 +283,15 @@ int cmd_app(struct CONSOLE *cons, int *fat, char *cmdline)
 		*((int *) 0xfe8) = (int) p;
 		file_loadfile(finfo->clustno, finfo->size, p, fat, (char *) (ADR_DISKIMG + 0x003e00));
 		set_segmdesc(gdt + 1003, finfo->size - 1, (int) p, AR_CODE32_ER);
+		if (finfo->size >= 8 && p[4] == 'H' && p[5] == 'a' && p[6] == 'r' && p[7] == 'i') {
+		// if (finfo->size >= 8 && strncmp(p + 4, "Hari", 4) == 0)
+			p[0] = 0xe8;
+			p[1] = 0x16;
+			p[2] = 0x00;
+			p[3] = 0x00;
+			p[4] = 0x00;
+			p[5] = 0xcb;
+		}
 		farcall(0, 1003 * 8);
 		memman_free_4k(memman, (int) p, finfo->size);
 		cons_newline(cons);

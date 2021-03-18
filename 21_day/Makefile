@@ -1,4 +1,5 @@
 OBJS_BOOTPACK = bootpack.o graphic.o dsctbl.o nasmfunc.o hankaku.o mysprintf.o int.o fifo.o keyboard.o mouse.o memory.o sheet.o timer.o mtask.o window.o console.o file.o
+OBJS_BOOTPACK2 = hello3.o a_nasm.o
 
 MAKE     = make -r
 DEL      = rm -f
@@ -27,6 +28,9 @@ asmhead.bin : asmhead.nas Makefile
 nasmfunc.o : nasmfunc.asm Makefile
 	nasm -g -f elf $< -o $@ -l nasmfunc.lst
 
+a_nasm.o : a_nasm.asm Makefile
+	nasm -g -f elf $< -o $@ -l nasmfunc.lst
+
 bootpack.hrb : $(OBJS_BOOTPACK) hrb.ld Makefile
 	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_BOOTPACK) -o $@
 
@@ -36,14 +40,18 @@ hello.hrb : hello.nas Makefile
 hello2.hrb : hello2.nas Makefile
 	nasm $< -o $@ -l hello2.lst
 
+hello3.hrb : $(OBJS_BOOTPACK2) hrb.ld Makefile
+	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_BOOTPACK2) -o $@
+
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
-haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb Makefile
+haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb hello3.hrb Makefile
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy -i haribote.img haribote.sys ::
 	mcopy -i haribote.img hello.hrb ::
 	mcopy -i haribote.img hello2.hrb ::
+	mcopy -i haribote.img hello3.hrb ::
 
 # 一般規則
 
