@@ -1,6 +1,7 @@
 OBJS_BOOTPACK = bootpack.o graphic.o dsctbl.o nasmfunc.o hankaku.o mysprintf.o int.o fifo.o keyboard.o mouse.o memory.o sheet.o timer.o mtask.o window.o console.o file.o
 OBJS_HELLO3 = hello3.o a_nasm.o
 OBJS_HELLO4 = hello4.o a_nasm.o
+OBJS_WINHELLO = winhello.o a_nasm.o
 OBJS_BUG1 = bug1.o a_nasm.o
 OBJS_BUG2 = bug2.o a_nasm.o
 
@@ -49,6 +50,9 @@ hello3.hrb : $(OBJS_HELLO3) hrb.ld Makefile
 hello4.hrb : $(OBJS_HELLO4) hrb.ld Makefile
 	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_HELLO4) -o $@
 
+winhello.hrb : $(OBJS_WINHELLO) hrb.ld Makefile
+	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_WINHELLO) -o $@
+
 bug1.hrb : $(OBJS_BUG1) hrb.ld Makefile
 	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_BUG1) -o $@
 
@@ -58,13 +62,14 @@ bug2.hrb : $(OBJS_BUG2) hrb.ld Makefile
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
-haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb hello3.hrb hello4.hrb bug1.hrb bug2.hrb Makefile
+haribote.img : ipl10.bin haribote.sys hello.hrb hello2.hrb hello3.hrb hello4.hrb winhello.hrb bug1.hrb bug2.hrb Makefile
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy -i haribote.img haribote.sys ::
 	mcopy -i haribote.img hello.hrb ::
 	mcopy -i haribote.img hello2.hrb ::
 	mcopy -i haribote.img hello3.hrb ::
 	mcopy -i haribote.img hello4.hrb ::
+	mcopy -i haribote.img winhello.hrb ::
 	mcopy -i haribote.img bug1.hrb ::
 	mcopy -i haribote.img bug2.hrb ::
 
