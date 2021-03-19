@@ -11,6 +11,7 @@ GLOBAL	api_point
 GLOBAL	api_refreshwin
 GLOBAL	api_linewin
 GLOBAL	api_closewin
+GLOBAL	api_getkey
 
 api_putchar:	; void api_putchar(int c);
 		MOV		EDX,1
@@ -171,4 +172,10 @@ api_closewin:		; void api_closewin(int win);
 		MOV		EBX,[ESP+8]	; win
 		INT		0x40
 		POP		EBX
+		RET
+
+api_getkey:		; int api_getkey(int mode);
+		MOV		EDX,15
+		MOV		EAX,[ESP+4]	; mode
+		INT		0x40
 		RET
