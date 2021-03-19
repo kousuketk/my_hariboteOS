@@ -361,6 +361,12 @@ int *hrb_api(int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int 
 	} else if (edx == 12) {
 		sht = (struct SHEET *) ebx;
 		sheet_refresh(sht, eax, ecx, esi, edi);
+	} else if (edx == 13) {
+		sht = (struct SHEET *) (ebx & 0xfffffffe);
+		hrb_api_linewin(sht, eax, ecx, esi, edi, ebp);
+		if ((ebx & 1) == 0) {
+			sheet_refresh(sht, eax, ecx, esi + 1, edi + 1);
+		}
 	}
 	return 0;
 }
