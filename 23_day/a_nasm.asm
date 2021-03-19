@@ -10,6 +10,7 @@ GLOBAL	api_free
 GLOBAL	api_point
 GLOBAL	api_refreshwin
 GLOBAL	api_linewin
+GLOBAL	api_closewin
 
 api_putchar:	; void api_putchar(int c);
 		MOV		EDX,1
@@ -162,4 +163,12 @@ api_linewin:		; void api_linewin(int win, int x0, int y0, int x1, int y1, int co
 		POP		EBP
 		POP		ESI
 		POP		EDI
+		RET
+
+api_closewin:		; void api_closewin(int win);
+		PUSH	EBX
+		MOV		EDX,14
+		MOV		EBX,[ESP+8]	; win
+		INT		0x40
+		POP		EBX
 		RET
