@@ -10,7 +10,8 @@ OBJS_STARS2 = stars2.o a_nasm.o
 OBJS_LINES = lines.o a_nasm.o
 OBJS_WALK = walk.o a_nasm.o
 OBJS_NOODLE = noodle.o mysprintf.o a_nasm.o 
-OBJS_BEEP = beepdown.o a_nasm.o 
+OBJS_BEEP = beepdown.o a_nasm.o
+OBJS_COLOR = color.o a_nasm.o
 OBJS_BUG1 = bug1.o a_nasm.o
 OBJS_BUG2 = bug2.o a_nasm.o
 
@@ -89,6 +90,9 @@ noodle.hrb : $(OBJS_NOODLE) hrb.ld Makefile
 beepdown.hrb : $(OBJS_BEEP) hrb.ld Makefile
 	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_BEEP) -o $@
 
+color.hrb : $(OBJS_COLOR) hrb.ld Makefile
+	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_COLOR) -o $@
+
 bug1.hrb : $(OBJS_BUG1) hrb.ld Makefile
 	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_BUG1) -o $@
 
@@ -102,7 +106,7 @@ haribote.img : ipl10.bin haribote.sys Makefile \
 	hello.hrb hello2.hrb hello3.hrb hello4.hrb \
 	winhelo.hrb winhelo2.hrb winhelo3.hrb \
 	star1.hrb stars.hrb stars2.hrb \
-	lines.hrb walk.hrb noodle.hrb beepdown.hrb \
+	lines.hrb walk.hrb noodle.hrb beepdown.hrb color.hrb \
 	bug1.hrb bug2.hrb Makefile
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy -i haribote.img haribote.sys ::
@@ -120,6 +124,7 @@ haribote.img : ipl10.bin haribote.sys Makefile \
 	mcopy -i haribote.img walk.hrb ::
 	mcopy -i haribote.img noodle.hrb ::
 	mcopy -i haribote.img beepdown.hrb ::
+	mcopy -i haribote.img color.hrb ::
 	mcopy -i haribote.img bug1.hrb ::
 	mcopy -i haribote.img bug2.hrb ::
 
