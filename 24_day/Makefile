@@ -9,6 +9,7 @@ OBJS_STARS = stars.o a_nasm.o
 OBJS_STARS2 = stars2.o a_nasm.o
 OBJS_LINES = lines.o a_nasm.o
 OBJS_WALK = walk.o a_nasm.o
+OBJS_NOODLE = noodle.o mysprintf.o a_nasm.o 
 OBJS_BUG1 = bug1.o a_nasm.o
 OBJS_BUG2 = bug2.o a_nasm.o
 
@@ -81,6 +82,9 @@ lines.hrb : $(OBJS_LINES) hrb.ld Makefile
 walk.hrb : $(OBJS_WALK) hrb.ld Makefile
 	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_WALK) -o $@
 
+noodle.hrb : $(OBJS_NOODLE) hrb.ld Makefile
+	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_NOODLE) -o $@
+
 bug1.hrb : $(OBJS_BUG1) hrb.ld Makefile
 	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_BUG1) -o $@
 
@@ -94,7 +98,7 @@ haribote.img : ipl10.bin haribote.sys Makefile \
 	hello.hrb hello2.hrb hello3.hrb hello4.hrb \
 	winhelo.hrb winhelo2.hrb winhelo3.hrb \
 	star1.hrb stars.hrb stars2.hrb \
-	lines.hrb walk.hrb \
+	lines.hrb walk.hrb noodle.hrb \
 	bug1.hrb bug2.hrb Makefile
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy -i haribote.img haribote.sys ::
@@ -110,6 +114,7 @@ haribote.img : ipl10.bin haribote.sys Makefile \
 	mcopy -i haribote.img stars2.hrb ::
 	mcopy -i haribote.img lines.hrb ::
 	mcopy -i haribote.img walk.hrb ::
+	mcopy -i haribote.img noodle.hrb ::
 	mcopy -i haribote.img bug1.hrb ::
 	mcopy -i haribote.img bug2.hrb ::
 
