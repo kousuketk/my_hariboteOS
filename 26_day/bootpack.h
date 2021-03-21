@@ -225,6 +225,7 @@ struct TASKCTL {
 	struct TASKLEVEL level[MAX_TASKLEVELS];
 	struct TASK tasks0[MAX_TASKS];
 };
+extern struct TASKCTL *taskctl;
 extern struct TIMER *task_timer;
 struct TASK *task_now(void);
 struct TASK *task_init(struct MEMMAN *memman);
@@ -246,18 +247,19 @@ struct CONSOLE {
 	int cur_x, cur_y, cur_c;
 	struct TIMER *timer;
 };
-void console_task(struct SHEET *sheet, unsigned int memtotal);
+void console_task(struct SHEET *sheet, int memtotal);
 void cons_putchar(struct CONSOLE *cons, int chr, char move);
 void cons_newline(struct CONSOLE *cons);
 void cons_putstr0(struct CONSOLE *cons, char *s);
 void cons_putstr1(struct CONSOLE *cons, char *s, int l);
-void cons_runcmd(char *cmdline, struct CONSOLE *cons, int *fat, unsigned int memtotal);
-void cmd_mem(struct CONSOLE *cons, unsigned int memtotal);
+void cons_runcmd(char *cmdline, struct CONSOLE *cons, int *fat, int memtotal);
+void cmd_mem(struct CONSOLE *cons, int memtotal);
 void cmd_cls(struct CONSOLE *cons);
 void cmd_dir(struct CONSOLE *cons);
 void cmd_type(struct CONSOLE *cons, int *fat, char *cmdline);
 void cmd_exit(struct CONSOLE *cons, int *fat);
 void cmd_start(struct CONSOLE *cons, char *cmdline, int memtotal);
+void cmd_ncst(struct CONSOLE *cons, char *cmdline, int memtotal);
 int cmd_app(struct CONSOLE *cons, int *fat, char *cmdline);
 int *hrb_api(int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int eax);
 int *inthandler0d(int *esp);
@@ -276,4 +278,5 @@ void file_loadfile(int clustno, int size, char *buf, int *fat, char *img);
 struct FILEINFO *file_search(char *name, struct FILEINFO *finfo, int max);
 
 /* bootpack.c */
+struct TASK *open_constask(struct SHEET *sht, unsigned int memtotal);
 struct SHEET *open_console(struct SHTCTL *shtctl, unsigned int memtotal);
