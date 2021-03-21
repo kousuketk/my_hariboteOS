@@ -2,10 +2,9 @@
 
 void console_task(struct SHEET *sheet, unsigned int memtotal)
 {
-	struct TIMER *timer;
 	struct TASK *task = task_now();
 	struct MEMMAN *memman = (struct MEMMAN *) MEMMAN_ADDR;
-	int i, fifobuf[128], *fat = (int *) memman_alloc_4k(memman, 4 * 2880);
+	int i, *fat = (int *) memman_alloc_4k(memman, 4 * 2880);
 	struct CONSOLE cons;
 	char cmdline[30];
 	cons.sht = sheet;
@@ -14,10 +13,9 @@ void console_task(struct SHEET *sheet, unsigned int memtotal)
 	cons.cur_c = -1;
 	task->cons = &cons;
 
-	fifo32_init(&task->fifo, 128, fifobuf, task);
-	timer = timer_alloc();
-	timer_init(timer, &task->fifo, 1);
-	timer_settime(timer, 50);
+	cons.timer = timer_alloc();
+	timer_init(cons.timer, &task->fifo, 1);
+	timer_settime(cons.timer, 50);
 	file_readfat(fat, (unsigned char *) (ADR_DISKIMG + 0x000200));
 
 	/* プロンプト表示 */
@@ -33,17 +31,17 @@ void console_task(struct SHEET *sheet, unsigned int memtotal)
 			io_sti();
 			if (i <= 1) { /* カーソル用タイマ */
 				if (i != 0) {
-					timer_init(timer, &task->fifo, 0); /* 次は0を */
+					timer_init(cons.timer, &task->fifo, 0); /* 次は0を */
 					if (cons.cur_c >= 0) {
 						cons.cur_c = COL8_FFFFFF;
 					}
 				} else {
-					timer_init(timer, &task->fifo, 1); /* 次は1を */
+					timer_init(cons.timer, &task->fifo, 1); /* 次は1を */
 					if (cons.cur_c >= 0) {
 						cons.cur_c = COL8_000000;
 					}
 				}
-				timer_settime(timer, 50);
+				timer_settime(cons.timer, 50);
 			}
 			if (i == 2) {	/* カーソルON */
 				cons.cur_c = COL8_FFFFFF;
@@ -291,12 +289,12 @@ int cmd_app(struct CONSOLE *cons, int *fat, char *cmdline)
 			dathrb = *((int *) (p + 0x0014));
 			q = (char *) memman_alloc_4k(memman, segsiz);
 			task->ds_base = (int) q;
-			set_segmdesc(gdt + 1003, finfo->size - 1, (int) p, AR_CODE32_ER + 0x60);
-			set_segmdesc(gdt + 1004, segsiz - 1,      (int) q, AR_DATA32_RW + 0x60);
+			set_segmdesc(gdt + task->sel / 8 + 1000, finfo->size - 1, (int) p, AR_CODE32_ER + 0x60);
+			set_segmdesc(gdt + task->sel / 8 + 2000, segsiz - 1,      (int) q, AR_DATA32_RW + 0x60);
 			for (i = 0; i < datsiz; i++) {
 				q[esp + i] = p[dathrb + i];
 			}
-			start_app(0x1b, 1003 * 8, esp, 1004 * 8, &(task->tss.esp0));
+			start_app(0x1b, task->sel + 1000 * 8, esp, task->sel + 2000 * 8, &(task->tss.esp0));
 			shtctl = (struct SHTCTL *) *((int *) 0x0fe4);
 			for (i = 0; i < MAX_SHEETS; i++) {
 				sht = &(shtctl->sheets0[i]);

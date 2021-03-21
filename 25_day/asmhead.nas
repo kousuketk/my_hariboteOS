@@ -111,8 +111,6 @@ keystatus:
 
 ; プロテクトモード移行
 
-; [INSTRSET "i486p"]				; 486の命令まで使いたいという記述
-
 		LGDT	[GDTR0]			; 暫定GDTを設定
 		MOV		EAX,CR0
 		AND		EAX,0x7fffffff	; bit31を0にする（ページング禁止のため）
@@ -174,6 +172,7 @@ skip:
 waitkbdout:
 		IN		 AL,0x64
 		AND		 AL,0x02
+		IN		 AL,0x60 		; から読み(受信バッファが悪さをしないように)
 		JNZ		waitkbdout		; ANDの結果が0でなければwaitkbdoutへ
 		RET
 

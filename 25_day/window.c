@@ -1,5 +1,3 @@
-/* ƒRƒ“ƒ\[ƒ‹ŠÖŒW */
-
 #include "bootpack.h"
 
 void make_window8(unsigned char *buf, int xsize, int ysize, char *title, char act)

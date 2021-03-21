@@ -28,7 +28,6 @@ void asm_inthandler0c(void);
 void asm_inthandler0d(void);
 void asm_inthandler20(void);
 void asm_inthandler21(void);
-void asm_inthandler27(void);
 void asm_inthandler2c(void);
 unsigned int memtest_sub(unsigned int start, unsigned int end);
 void farjmp(int eip, int cs);
@@ -103,7 +102,6 @@ void set_gatedesc(struct GATE_DESCRIPTOR *gd, int offset, int selector, int ar);
 
 /* int.c */
 void init_pic(void);
-void inthandler27(int *esp);
 #define PIC0_ICW1		0x0020
 #define PIC0_OCW2		0x0020
 #define PIC0_IMR		0x0021

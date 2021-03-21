@@ -7,7 +7,7 @@ int keydata0;
 
 void inthandler21(int *esp)
 {
-	unsigned char data;
+	int data;
 	io_out8(PIC0_OCW2, 0x61);	/* IRQ-01Žó•tŠ®—¹‚ðPIC‚É’Ê’m */
 	data = io_in8(PORT_KEYDAT);
 	fifo32_put(keyfifo, data + keydata0);
@@ -40,4 +40,5 @@ void init_keyboard(struct FIFO32 *fifo, int data0)
 	io_out8(PORT_KEYCMD, KEYCMD_WRITE_MODE);
 	wait_KBC_sendready();
 	io_out8(PORT_KEYDAT, KBC_MODE);
+	return;
 }

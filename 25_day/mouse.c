@@ -8,7 +8,7 @@ int mousedata0;
 void inthandler2c(int *esp)
 /* PS/2マウスからの割り込み */
 {
-	unsigned char data;
+	int data;
 	io_out8(PIC1_OCW2, 0x64);	/* IRQ-12受付完了をPIC1に通知 */
 	io_out8(PIC0_OCW2, 0x62);	/* IRQ-02受付完了をPIC0に通知 */
 	data = io_in8(PORT_KEYDAT);

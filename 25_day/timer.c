@@ -18,7 +18,7 @@ void init_pit(void)
 	io_out8(PIT_CNT0, 0x9c);
 	io_out8(PIT_CNT0, 0x2e);
 	timerctl.count = 0;
-  for (i = 0; i < MAX_TIMER; i++) {
+	for (i = 0; i < MAX_TIMER; i++) {
 		timerctl.timers0[i].flags = 0; /* 未使用 */
 	}
 	t = timer_alloc(); /* 一つもらってくる */
@@ -107,7 +107,7 @@ void inthandler20(int *esp)
 		if (timer != task_timer) {
 			fifo32_put(timer->fifo, timer->data);
 		} else {
-			ts = 1; /* mt_timerがタイムアウトした */
+			ts = 1; /* task_timerがタイムアウトした */
 		}
 		timer = timer->next; /* 次のタイマの番地をtimerに代入 */
 	}

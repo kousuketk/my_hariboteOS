@@ -1,4 +1,5 @@
 /* グラフィック処理関係 */
+
 #include "bootpack.h"
 
 void init_palette(void)
@@ -33,7 +34,7 @@ void init_palette(void)
 			}
 		}
 	}
-	set_palette(0, 15, table_rgb);
+	set_palette(16, 231, table2);
 	return;
 }
 
