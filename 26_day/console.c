@@ -170,6 +170,8 @@ void cons_runcmd(char *cmdline, struct CONSOLE *cons, int *fat, unsigned int mem
 	} else if (cmdline[0] == 't' && cmdline[1] == 'y' && cmdline[2] == 'p' &&
 							cmdline[3] == 'e' && cmdline[4] == ' ') {
 		cmd_type(cons, fat, cmdline);
+	} else if (cmdline[0] == 'e' && cmdline[1] == 'x' && cmdline[2] == 'i' && cmdline[3] == 't' && cmdline[4] == 0) {
+		cmd_exit(cons, fat);
 	} else if (cmdline[0] != 0) {
 		if (cmd_app(cons, fat, cmdline) == 0) {
 			/* コマンドではなく、アプリでもなく、さらに空行でもない */
@@ -244,6 +246,22 @@ void cmd_type(struct CONSOLE *cons, int *fat, char *cmdline)
 	}
 	cons_newline(cons);
 	return;
+}
+
+void cmd_exit(struct CONSOLE *cons, int *fat)
+{
+	struct MEMMAN *memman = (struct MEMMAN *) MEMMAN_ADDR;
+	struct TASK *task = task_now();
+	struct SHTCTL *shtctl = (struct SHTCTL *) *((int *) 0x0fe4);
+	struct FIFO32 *fifo = (struct FIFO32 *) *((int *) 0x0fec);
+	timer_cancel(cons->timer);
+	memman_free_4k(memman, (int) fat, 4 * 2880);
+	io_cli();
+	fifo32_put(fifo, cons->sht - shtctl->sheets0 + 768);	/* 768～1023 */
+	io_sti();
+	for (;;) {
+		task_sleep(task);
+	}
 }
 
 int cmd_app(struct CONSOLE *cons, int *fat, char *cmdline)
