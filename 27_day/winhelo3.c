@@ -12,7 +12,7 @@ void HariMain(void)
 	api_putstrwin(win, 28, 28, 0, 12, "hello, world");
 	for (;;) {
 		if (api_getkey(1) == 0x0a) {
-			break; /* Enter????break; */
+			break;
 		}
 	}
 	api_end();
