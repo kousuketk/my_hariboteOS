@@ -15,8 +15,6 @@ OBJS_NOODLE = noodle.o mysprintf.o $(OBJS_API)
 OBJS_BEEP = beepdown.o $(OBJS_API)
 OBJS_COLOR = color.o $(OBJS_API)
 OBJS_COLOR2 = color2.o $(OBJS_API)
-OBJS_BUG1 = bug1.o $(OBJS_API)
-OBJS_BUG2 = bug2.o $(OBJS_API)
 
 MAKE     = make -r
 DEL      = rm -f
@@ -47,12 +45,6 @@ nasmfunc.o : nasmfunc.asm Makefile
 
 bootpack.hrb : $(OBJS_BOOTPACK) hrb.ld Makefile
 	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_BOOTPACK) -o $@
-
-hello.hrb : hello.nas Makefile
-	nasm $< -o $@ -l hello.lst
-
-hello2.hrb : hello2.nas Makefile
-	nasm $< -o $@ -l hello2.lst
 
 hello3.hrb : $(OBJS_HELLO3) hrb.ld Makefile
 	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_HELLO3) -o $@
@@ -96,26 +88,17 @@ color.hrb : $(OBJS_COLOR) hrb.ld Makefile
 color2.hrb : $(OBJS_COLOR2) hrb.ld Makefile
 	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_COLOR2) -o $@
 
-bug1.hrb : $(OBJS_BUG1) hrb.ld Makefile
-	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_BUG1) -o $@
-
-bug2.hrb : $(OBJS_BUG2) hrb.ld Makefile
-	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_BUG2) -o $@
-
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
 haribote.img : ipl10.bin haribote.sys Makefile \
-	hello.hrb hello2.hrb hello3.hrb hello4.hrb \
+	hello3.hrb hello4.hrb \
 	winhelo.hrb winhelo2.hrb winhelo3.hrb \
 	star1.hrb stars.hrb stars2.hrb \
 	lines.hrb walk.hrb noodle.hrb beepdown.hrb \
-	color.hrb color2.hrb \
-	bug1.hrb bug2.hrb Makefile
+	color.hrb color2.hrb Makefile
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy -i haribote.img haribote.sys ::
-	mcopy -i haribote.img hello.hrb ::
-	mcopy -i haribote.img hello2.hrb ::
 	mcopy -i haribote.img hello3.hrb ::
 	mcopy -i haribote.img hello4.hrb ::
 	mcopy -i haribote.img winhelo.hrb ::
@@ -130,8 +113,6 @@ haribote.img : ipl10.bin haribote.sys Makefile \
 	mcopy -i haribote.img beepdown.hrb ::
 	mcopy -i haribote.img color.hrb ::
 	mcopy -i haribote.img color2.hrb ::
-	mcopy -i haribote.img bug1.hrb ::
-	mcopy -i haribote.img bug2.hrb ::
 
 # 一般規則
 
