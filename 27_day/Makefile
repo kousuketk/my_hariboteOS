@@ -1,20 +1,22 @@
 OBJS_BOOTPACK = bootpack.o graphic.o dsctbl.o nasmfunc.o hankaku.o mysprintf.o int.o fifo.o keyboard.o mouse.o memory.o sheet.o timer.o mtask.o window.o console.o file.o
-OBJS_HELLO3 = hello3.o a_nasm.o
-OBJS_HELLO4 = hello4.o a_nasm.o
-OBJS_WINHELO = winhelo.o a_nasm.o
-OBJS_WINHELO2 = winhelo2.o a_nasm.o
-OBJS_WINHELO3 = winhelo3.o a_nasm.o
-OBJS_STAR1 = star1.o a_nasm.o
-OBJS_STARS = stars.o a_nasm.o
-OBJS_STARS2 = stars2.o a_nasm.o
-OBJS_LINES = lines.o a_nasm.o
-OBJS_WALK = walk.o a_nasm.o
-OBJS_NOODLE = noodle.o mysprintf.o a_nasm.o 
-OBJS_BEEP = beepdown.o a_nasm.o
-OBJS_COLOR = color.o a_nasm.o
-OBJS_COLOR2 = color2.o a_nasm.o
-OBJS_BUG1 = bug1.o a_nasm.o
-OBJS_BUG2 = bug2.o a_nasm.o
+OBJS_API = api001.obj api002.obj api003.obj api004.obj api005.obj api006.obj api007.obj api008.obj api009.obj api010.obj \
+			api011.obj api012.obj api013.obj api014.obj api015.obj api016.obj api017.obj api018.obj api019.obj api020.obj
+OBJS_HELLO3 = hello3.o api001.obj api004.obj
+OBJS_HELLO4 = hello4.o $(OBJS_API)
+OBJS_WINHELO = winhelo.o $(OBJS_API)
+OBJS_WINHELO2 = winhelo2.o $(OBJS_API)
+OBJS_WINHELO3 = winhelo3.o $(OBJS_API)
+OBJS_STAR1 = star1.o $(OBJS_API)
+OBJS_STARS = stars.o $(OBJS_API)
+OBJS_STARS2 = stars2.o $(OBJS_API)
+OBJS_LINES = lines.o $(OBJS_API)
+OBJS_WALK = walk.o $(OBJS_API)
+OBJS_NOODLE = noodle.o mysprintf.o $(OBJS_API) 
+OBJS_BEEP = beepdown.o $(OBJS_API)
+OBJS_COLOR = color.o $(OBJS_API)
+OBJS_COLOR2 = color2.o $(OBJS_API)
+OBJS_BUG1 = bug1.o $(OBJS_API)
+OBJS_BUG2 = bug2.o $(OBJS_API)
 
 MAKE     = make -r
 DEL      = rm -f
@@ -41,9 +43,6 @@ asmhead.bin : asmhead.nas Makefile
 	nasm $< -o $@ -l asmhead.lst
 
 nasmfunc.o : nasmfunc.asm Makefile
-	nasm -g -f elf $< -o $@ -l nasmfunc.lst
-
-a_nasm.o : a_nasm.asm Makefile
 	nasm -g -f elf $< -o $@ -l nasmfunc.lst
 
 bootpack.hrb : $(OBJS_BOOTPACK) hrb.ld Makefile
@@ -139,6 +138,9 @@ haribote.img : ipl10.bin haribote.sys Makefile \
 %.o : %.c
 	$(CC) $(CFLAGS) -c $*.c -o $*.o
 
+%.obj : %.asm Makefile
+	nasm -g -f elf $< -o $@ -l nasmfunc.lst
+
 # コマンド
 
 img :
@@ -152,6 +154,7 @@ clean :
 	-$(DEL) *.bin
 	-$(DEL) *.lst
 	-$(DEL) *.o
+	-$(DEL) *.obj
 	-$(DEL) *.sys
 	-$(DEL) *.hrb
 	-$(DEL) hankaku.c
