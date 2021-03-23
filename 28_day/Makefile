@@ -1,6 +1,7 @@
 OBJS_BOOTPACK = bootpack.o graphic.o dsctbl.o nasmfunc.o hankaku.o mysprintf.o int.o fifo.o keyboard.o mouse.o memory.o sheet.o timer.o mtask.o window.o console.o file.o
 OBJS_API = api001.obj api002.obj api003.obj api004.obj api005.obj api006.obj api007.obj api008.obj api009.obj api010.obj \
-			api011.obj api012.obj api013.obj api014.obj api015.obj api016.obj api017.obj api018.obj api019.obj api020.obj mysprintf.o alloca.obj
+			api011.obj api012.obj api013.obj api014.obj api015.obj api016.obj api017.obj api018.obj api019.obj api020.obj \
+			api021.obj api022.obj api023.obj api024.obj api025.obj mysprintf.o alloca.obj
 OBJS_HELLO3 = hello3.o api001.obj api004.obj
 OBJS_HELLO4 = hello4.o $(OBJS_API)
 OBJS_WINHELO = winhelo.o $(OBJS_API)
@@ -18,6 +19,7 @@ OBJS_COLOR2 = color2.o $(OBJS_API)
 OBJS_SOSU = sosu.o $(OBJS_API)
 OBJS_SOSU2 = sosu2.o $(OBJS_API)
 OBJS_SOSU3 = sosu3.o $(OBJS_API)
+OBJS_TYPEIPL = typeipl.o $(OBJS_API)
 
 MAKE     = make -r
 DEL      = rm -f
@@ -100,6 +102,9 @@ sosu2.hrb : $(OBJS_SOSU2) hrb.ld Makefile
 sosu3.hrb : $(OBJS_SOSU3) hrb.ld Makefile
 	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_SOSU3) -o $@
 
+typeipl.hrb : $(OBJS_TYPEIPL) hrb.ld Makefile
+	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_TYPEIPL) -o $@
+
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
@@ -109,7 +114,8 @@ haribote.img : ipl10.bin haribote.sys Makefile \
 	star1.hrb stars.hrb stars2.hrb \
 	lines.hrb walk.hrb noodle.hrb beepdown.hrb \
 	color.hrb color2.hrb \
-	sosu.hrb sosu2.hrb sosu3.hrb
+	sosu.hrb sosu2.hrb sosu3.hrb \
+	typeipl.hrb
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy -i haribote.img haribote.sys ::
 	mcopy -i haribote.img hello3.hrb ::
@@ -129,6 +135,7 @@ haribote.img : ipl10.bin haribote.sys Makefile \
 	mcopy -i haribote.img sosu.hrb ::
 	mcopy -i haribote.img sosu2.hrb ::
 	mcopy -i haribote.img sosu3.hrb ::
+	mcopy -i haribote.img typeipl.hrb ::
 
 # 一般規則
 
