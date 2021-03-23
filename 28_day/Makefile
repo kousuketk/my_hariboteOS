@@ -21,6 +21,7 @@ OBJS_SOSU2 = sosu2.o $(OBJS_API)
 OBJS_SOSU3 = sosu3.o $(OBJS_API)
 OBJS_TYPEIPL = typeipl.o $(OBJS_API)
 OBJS_TYPE = type.o $(OBJS_API)
+OBJS_IROHA = iroha.o $(OBJS_API)
 
 MAKE     = make -r
 DEL      = rm -f
@@ -109,6 +110,9 @@ typeipl.hrb : $(OBJS_TYPEIPL) hrb.ld Makefile
 type.hrb : $(OBJS_TYPE) hrb.ld Makefile
 	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_TYPE) -o $@
 
+iroha.hrb : $(OBJS_IROHA) hrb.ld Makefile
+	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_IROHA) -o $@
+
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
@@ -119,7 +123,8 @@ haribote.img : ipl10.bin haribote.sys Makefile \
 	lines.hrb walk.hrb noodle.hrb beepdown.hrb \
 	color.hrb color2.hrb \
 	sosu.hrb sosu2.hrb sosu3.hrb \
-	typeipl.hrb type.hrb text.txt
+	typeipl.hrb type.hrb text.txt \
+	iroha.hrb nihongo.fnt
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy -i haribote.img haribote.sys ::
 	mcopy -i haribote.img hello3.hrb ::
@@ -142,6 +147,8 @@ haribote.img : ipl10.bin haribote.sys Makefile \
 	mcopy -i haribote.img typeipl.hrb ::
 	mcopy -i haribote.img type.hrb ::
 	mcopy -i haribote.img text.txt ::
+	mcopy -i haribote.img iroha.hrb ::
+	mcopy -i haribote.img nihongo.fnt ::
 
 # 一般規則
 
