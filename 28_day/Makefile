@@ -16,6 +16,8 @@ OBJS_BEEP = beepdown.o $(OBJS_API)
 OBJS_COLOR = color.o $(OBJS_API)
 OBJS_COLOR2 = color2.o $(OBJS_API)
 OBJS_SOSU = sosu.o $(OBJS_API)
+OBJS_SOSU2 = sosu2.o $(OBJS_API)
+OBJS_SOSU3 = sosu3.o $(OBJS_API)
 
 MAKE     = make -r
 DEL      = rm -f
@@ -92,6 +94,12 @@ color2.hrb : $(OBJS_COLOR2) hrb.ld Makefile
 sosu.hrb : $(OBJS_SOSU) hrb.ld Makefile
 	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_SOSU) -o $@
 
+sosu2.hrb : $(OBJS_SOSU2) hrb.ld Makefile
+	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_SOSU2) -o $@
+
+sosu3.hrb : $(OBJS_SOSU3) hrb.ld Makefile
+	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_SOSU3) -o $@
+
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
@@ -101,7 +109,7 @@ haribote.img : ipl10.bin haribote.sys Makefile \
 	star1.hrb stars.hrb stars2.hrb \
 	lines.hrb walk.hrb noodle.hrb beepdown.hrb \
 	color.hrb color2.hrb \
-	sosu.hrb
+	sosu.hrb sosu2.hrb sosu3.hrb
 	mformat -f 1440 -C -B ipl10.bin -i haribote.img ::
 	mcopy -i haribote.img haribote.sys ::
 	mcopy -i haribote.img hello3.hrb ::
@@ -119,6 +127,8 @@ haribote.img : ipl10.bin haribote.sys Makefile \
 	mcopy -i haribote.img color.hrb ::
 	mcopy -i haribote.img color2.hrb ::
 	mcopy -i haribote.img sosu.hrb ::
+	mcopy -i haribote.img sosu2.hrb ::
+	mcopy -i haribote.img sosu3.hrb ::
 
 # 一般規則
 
