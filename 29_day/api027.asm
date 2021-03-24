@@ -1,4 +1,4 @@
-GLOBAL	_api_getlang
+GLOBAL	api_getlang
 
 api_getlang:		; int api_getlang(void);
 		MOV		EDX,27
