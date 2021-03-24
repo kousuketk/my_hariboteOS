@@ -24,6 +24,7 @@ OBJS_TYPE = type.o $(OBJS_API)
 OBJS_IROHA = iroha.o $(OBJS_API)
 OBJS_CHKLANG = chklang.o $(OBJS_API)
 OBJS_NOTREC = notrec.o $(OBJS_API)
+OBJS_BBALL = bball.o $(OBJS_API)
 
 MAKE     = make -r
 DEL      = rm -f
@@ -124,6 +125,9 @@ chklang.hrb : $(OBJS_CHKLANG) hrb.ld Makefile
 notrec.hrb : $(OBJS_NOTREC) hrb.ld Makefile
 	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_NOTREC) -o $@
 
+bball.hrb : $(OBJS_BBALL) hrb.ld Makefile
+	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_BBALL) -o $@
+
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
@@ -135,7 +139,8 @@ haribote.img : ipl20.bin haribote.sys Makefile \
 	color.hrb color2.hrb \
 	sosu.hrb sosu2.hrb sosu3.hrb \
 	typeipl.hrb type.hrb text.txt \
-	iroha.hrb nihongo.fnt euc.txt chklang.hrb notrec.hrb
+	iroha.hrb nihongo.fnt euc.txt chklang.hrb notrec.hrb \
+	bball.hrb
 	mformat -f 1440 -C -B ipl20.bin -i haribote.img ::
 	mcopy -i haribote.img haribote.sys ::
 	mcopy -i haribote.img hello3.hrb ::
@@ -163,6 +168,7 @@ haribote.img : ipl20.bin haribote.sys Makefile \
 	mcopy -i haribote.img euc.txt ::
 	mcopy -i haribote.img chklang.hrb ::
 	mcopy -i haribote.img notrec.hrb ::
+	mcopy -i haribote.img bball.hrb ::
 
 # 一般規則
 
