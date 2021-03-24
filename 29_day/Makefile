@@ -1,7 +1,7 @@
 OBJS_BOOTPACK = bootpack.o graphic.o dsctbl.o nasmfunc.o hankaku.o mysprintf.o int.o fifo.o keyboard.o mouse.o memory.o sheet.o timer.o mtask.o window.o console.o file.o
 OBJS_API = api001.obj api002.obj api003.obj api004.obj api005.obj api006.obj api007.obj api008.obj api009.obj api010.obj \
 			api011.obj api012.obj api013.obj api014.obj api015.obj api016.obj api017.obj api018.obj api019.obj api020.obj \
-			api021.obj api022.obj api023.obj api024.obj api025.obj api026.obj api027.obj mysprintf.o alloca.obj
+			api021.obj api022.obj api023.obj api024.obj api025.obj api026.obj api027.obj mysprintf.o mystrlen.o alloca.obj
 OBJS_HELLO3 = hello3.o api001.obj api004.obj
 OBJS_HELLO4 = hello4.o $(OBJS_API)
 OBJS_WINHELO = winhelo.o $(OBJS_API)
@@ -25,6 +25,7 @@ OBJS_IROHA = iroha.o $(OBJS_API)
 OBJS_CHKLANG = chklang.o $(OBJS_API)
 OBJS_NOTREC = notrec.o $(OBJS_API)
 OBJS_BBALL = bball.o $(OBJS_API)
+OBJS_INVADER = invader.o $(OBJS_API)
 
 MAKE     = make -r
 DEL      = rm -f
@@ -128,6 +129,9 @@ notrec.hrb : $(OBJS_NOTREC) hrb.ld Makefile
 bball.hrb : $(OBJS_BBALL) hrb.ld Makefile
 	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_BBALL) -o $@
 
+invader.hrb : $(OBJS_INVADER) hrb.ld Makefile
+	$(CC) $(CFLAGS) -march=i486 -nostdlib -T hrb.ld -g $(OBJS_INVADER) -o $@
+
 haribote.sys : asmhead.bin bootpack.hrb Makefile
 	cat asmhead.bin bootpack.hrb > haribote.sys
 
@@ -140,7 +144,7 @@ haribote.img : ipl20.bin haribote.sys Makefile \
 	sosu.hrb sosu2.hrb sosu3.hrb \
 	typeipl.hrb type.hrb text.txt \
 	iroha.hrb nihongo.fnt euc.txt chklang.hrb notrec.hrb \
-	bball.hrb
+	bball.hrb invader.hrb
 	mformat -f 1440 -C -B ipl20.bin -i haribote.img ::
 	mcopy -i haribote.img haribote.sys ::
 	mcopy -i haribote.img hello3.hrb ::
@@ -169,6 +173,7 @@ haribote.img : ipl20.bin haribote.sys Makefile \
 	mcopy -i haribote.img chklang.hrb ::
 	mcopy -i haribote.img notrec.hrb ::
 	mcopy -i haribote.img bball.hrb ::
+	mcopy -i haribote.img invader.hrb ::
 
 # 一般規則
 

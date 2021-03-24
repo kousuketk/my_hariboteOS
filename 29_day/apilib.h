@@ -26,3 +26,4 @@ int api_fread(char *buf, int maxsize, int fhandle);
 int api_cmdline(char *buf, int maxsize);
 int api_getlang(void);
 extern void sprintf(char *str, char *fmt, ...);     // mysprintf.c ‚ÅA“Æ©‚Ì sprintf ‚ğì¬‚µ‚½‚Ì‚Ås’Ç‰Á
+unsigned int my_strlen(char* str);
